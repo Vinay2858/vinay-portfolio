@@ -2,116 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  scroll-behavior: smooth;
-  font-family: "Poppins", sans-serif;
+/* Base & fonts */
+:root {
+  --accent: #0b74ff;
+  --accent-2: #7b2ff7;
+  --glass: rgba(255, 255, 255, 0.08);
 }
 
-/* Basic component styles (kept simple to avoid @apply issues) */
+/* Smooth gradient background animation */
+.bg-animated {
+  background: linear-gradient(270deg, var(--accent), var(--accent-2), #00b4ff);
+  background-size: 600% 600%;
+  animation: bg-gradient 12s ease infinite;
+}
+
+/* floating blobs */
+.blob {
+  position: absolute;
+  filter: blur(28px) saturate(120%);
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* glass card */
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.12)
+  );
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.12);
+}
+
+/* dark mode overrides */
+.dark .glass {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 11, 13, 0.6),
+    rgba(6, 8, 12, 0.28)
+  );
+}
+
+/* buttons */
 .btn-primary {
-  padding: 0.5rem 1rem;
-  background-color: #4f46e5; /* indigo-600 */
-  color: white;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
+  @apply px-4 py-2 rounded-md text-white font-semibold shadow-lg;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 .btn-primary:hover {
-  background-color: #4338ca;
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 14px 40px rgba(11, 116, 255, 0.14);
 }
 
+/* outline */
 .btn-outline {
-  padding: 0.5rem 1rem;
-  border: 1px solid #4f46e5;
-  color: #4f46e5;
-  border-radius: 0.5rem;
-}
-.btn-outline:hover {
-  background-color: rgba(79, 70, 229, 0.06);
+  @apply px-4 py-2 rounded-md font-semibold border;
+  border-color: rgba(11, 116, 255, 0.18);
+  color: var(--accent);
+  background: transparent;
 }
 
-.card {
-  padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 14px rgba(2, 6, 23, 0.08);
+/* Hero layout tweaks */
+.hero-card {
+  @apply p-6 rounded-xl relative overflow-hidden;
 }
 
-.input {
-  padding: 0.5rem 1rem;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 0.5rem;
-  border: 1px solid #e6edf3;
-}
-.input:focus {
-  outline: 2px solid rgba(79, 70, 229, 0.2);
-}
-
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* small screens spacing */
+@media (max-width: 640px) {
+  .hero-stack {
+    @apply flex-col-reverse gap-6;
   }
-  a:hover {
-    color: #747bff;
+}
+
+/* typing cursor */
+.typewriter {
+  display: inline-block;
+  border-right: 2px solid rgba(0, 0, 0, 0.6);
+  padding-right: 4px;
+  animation: blink 0.9s steps(2) infinite;
+}
+@keyframes blink {
+  50% {
+    border-color: transparent;
   }
-  button {
-    background-color: #f9f9f9;
+}
+/* Custom cursor support fallback */
+.pointer-events-none {
+  pointer-events: none;
+}
+
+/* button interactive helper */
+.interactive {
+  cursor: none;
+} /* we hide default cursor for a cleaner custom cursor on supported devices */
+
+/* prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
   }
+}
+
+/* subtle top progress transition */
+.transition-width {
+  transition: width 120ms linear;
+}
+
+/* small modal glass tweak */
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.12)
+  );
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.12);
+}
+.dark .glass {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 11, 13, 0.6),
+    rgba(6, 8, 12, 0.28)
+  );
+}
+
+/* small utility for outline when focused */
+:focus {
+  outline: 2px solid rgba(11, 116, 255, 0.18);
+  outline-offset: 2px;
 }
